@@ -88,3 +88,96 @@ uv run main.py --width 200 --height 200 --cell-size 4 --interval 0.01
 ## 開発
 
 新しいパターンを追加したい場合は、`patterns.py` に関数を追加し、`create_pattern` 関数内の辞書に登録してください。
+
+---
+
+# Brian's Brain (English)
+
+Brian's Brain is a cellular automaton devised by Brian Silverman in the mid-1990s.
+It is similar to Conway's Game of Life, but because cells have three states, it exhibits more complex and organic movements (resembling the firing of neurons in the brain).
+
+## Rules
+
+Each cell takes one of the following three states:
+
+1.  **Ready (Off / 0)**: Waiting state (Black)
+2.  **Firing (On / 1)**: Firing state (White)
+3.  **Refractory (Dying / 2)**: Refractory period (Red)
+
+The transition rules are as follows:
+
+- **Ready -> Firing**: If exactly **2** of the 8 surrounding neighbors are in the Firing state, the cell becomes Firing in the next step.
+- **Firing -> Refractory**: A cell in the Firing state always becomes Refractory in the next step.
+- **Refractory -> Ready**: A cell in the Refractory state always becomes Ready in the next step.
+
+The existence of this "refractory period" allows signals to propagate in one direction and creates complex oscillating patterns.
+
+## Requirements
+
+- Python 3.12 or higher
+- [uv](https://github.com/astral-sh/uv) (Package manager)
+
+## Installation
+
+```bash
+git clone https://github.com/plume013/Brian-s-Brain.git
+cd Brian-s-Brain
+uv sync
+```
+
+## Usage
+
+Basic execution:
+
+```bash
+uv run main.py
+```
+
+### Options
+
+You can customize the simulation by specifying various options.
+
+| Argument               | Default  | Description                                                             |
+| :--------------------- | :------- | :---------------------------------------------------------------------- |
+| `--width`              | 100      | Width of the grid (number of cells)                                     |
+| `--height`             | 100      | Height of the grid (number of cells)                                    |
+| `--cell-size`          | 12       | Pixel size of one cell                                                  |
+| `--interval`           | 0.1      | Update interval (seconds)                                               |
+| `--steps`              | 200      | Number of execution steps (-1 for infinite)                             |
+| `--wrap`               | False    | Wrap the edges of the grid (Toroidal)                                   |
+| `--pattern`            | (Random) | Specify initial pattern (`2x2_block`, `oscillator_p3`, `cross`, `line`) |
+| `--fire-density`       | 0.25     | Probability of firing cells during random initialization                |
+| `--refractory-density` | 0.00     | Probability of refractory cells during random initialization            |
+
+### Examples
+
+**Run the famous "2x2 block" (expands like a diamond):**
+
+```bash
+uv run main.py --pattern 2x2_block
+```
+
+**Run infinitely with wrapped edges:**
+
+```bash
+uv run main.py --wrap --steps -1
+```
+
+**Run fast on a large grid:**
+
+```bash
+uv run main.py --width 200 --height 200 --cell-size 4 --interval 0.01
+```
+
+## Patterns
+
+Preset patterns available via `--pattern`.
+
+- **2x2_block**: A 2x2 block. The most famous pattern in Brian's Brain, continuously emitting signals in a diamond shape in 4 directions.
+- **oscillator_p3**: A pattern that oscillates with a period of 3.
+- **cross**: A cross-shaped configuration.
+- **line**: A horizontal line configuration.
+
+## Development
+
+If you want to add a new pattern, add a function to `patterns.py` and register it in the dictionary within the `create_pattern` function.
