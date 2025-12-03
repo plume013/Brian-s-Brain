@@ -145,7 +145,7 @@ def neighbor_counts(grid: np.ndarray, wrap: bool) -> np.ndarray:
 def step(grid: np.ndarray, wrap: bool) -> np.ndarray:
     """次世代へ進めた盤面を返す（numpy でベクトル化）。"""
     neighbor = neighbor_counts(grid, wrap)
-    firing_next = (grid == 0) & (neighbor == 3)
+    firing_next = (grid == 0) & (neighbor == 2)
     refractory_next = (grid == 1)
     ready_next = (grid == 2)
 
@@ -195,7 +195,7 @@ class BriansBrainApp:
             x0, y0 = x * cs, y * cs
             x1, y1 = x0 + cs, y0 + cs
             self.canvas.create_rectangle(x0, y0, x1, y1, fill="red", outline="")
-        self.root.title(f"Life Game - Generation {self.generation}")
+        self.root.title(f"Brian's Brain - Generation {self.generation}")
 
     def tick(self) -> None:
         """1 ステップ進めて再描画し、次の tick を予約する。"""
