@@ -3,6 +3,7 @@ import argparse
 import tkinter as tk
 import numpy as np
 
+from patterns import create_pattern
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Brian's Brain")
@@ -69,54 +70,7 @@ def create_grid(width: int, height: int, fire_density: float, refractory_density
     return grid
 
 
-def create_famous_pattern(width: int, height: int, pattern_name: str = "2x2_block") -> np.ndarray:
-    """Brian's Brain の有名な初期パターンを生成する。
 
-    Args:
-        width: 盤面の幅
-        height: 盤面の高さ
-        pattern_name: パターンの名前
-            - "2x2_block": 2×2ブロック（永遠に拡大するダイヤモンド）
-            - "oscillator_p3": 周期3の振動子
-            - "cross": 十字型パターン
-
-    Returns:
-        初期化された盤面
-    """
-    grid = np.zeros((height, width), dtype=np.uint8)
-    center_y, center_x = height // 2, width // 2
-
-    if pattern_name == "2x2_block":
-        # 最も有名な2×2ブロック - 永遠に拡大するダイヤモンドパターン
-        grid[center_y:center_y+2, center_x:center_x+2] = 1
-
-    elif pattern_name == "oscillator_p3":
-        # 周期3の振動子パターン
-        positions = [
-            (center_y, center_x),
-            (center_y, center_x+1),
-            (center_y+1, center_x),
-            (center_y+1, center_x+1),
-        ]
-        for y, x in positions:
-            grid[y, x] = 1
-        grid[center_y-1, center_x] = 2
-        grid[center_y-1, center_x+1] = 2
-        grid[center_y+2, center_x] = 2
-        grid[center_y+2, center_x+1] = 2
-
-    elif pattern_name == "cross":
-        # 十字型の発火パターン
-        for i in range(-2, 3):
-            grid[center_y+i, center_x] = 1
-            grid[center_y, center_x+i] = 1
-
-    elif pattern_name == "line":
-        # 水平線パターン
-        for i in range(-5, 6):
-            grid[center_y, center_x+i] = 1
-
-    return grid
 
 
 def neighbor_counts(grid: np.ndarray, wrap: bool) -> np.ndarray:
@@ -221,7 +175,7 @@ def run() -> None:
 
     if args.pattern:
         # 有名なパターンを使用
-        grid = create_famous_pattern(args.width, args.height, args.pattern)
+        grid = create_pattern(args.width, args.height, args.pattern)
     else:
         # ランダム初期化
         grid = create_grid(args.width, args.height, args.fire_density, args.refractory_density)
